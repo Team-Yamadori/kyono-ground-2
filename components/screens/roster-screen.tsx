@@ -196,7 +196,7 @@ function createNewPlayer(existingNumbers: number[]): Player {
 }
 
 export function RosterScreen() {
-  const { state, navigate, updateMyTeam } = useAppContext();
+  const { state, navigate, goBack, updateMyTeam } = useAppContext();
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
 
   const team = state.myTeam;
@@ -237,7 +237,7 @@ export function RosterScreen() {
       <div className="flex items-center border-b border-[hsl(210,40%,18%)] bg-[hsl(210,60%,8%)] px-3 py-3">
         <button
           type="button"
-          onClick={() => navigate("home")}
+          onClick={goBack}
           className="flex items-center gap-1 text-[hsl(210,20%,55%)] active:opacity-70"
         >
           <ArrowLeft size={18} />

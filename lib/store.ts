@@ -23,6 +23,7 @@ export interface AppState {
 
 export type Screen =
   | "login"
+  | "team-select"
   | "team-create"
   | "home"
   | "team-edit"
@@ -44,6 +45,7 @@ export interface AppContextValue {
   addGameRecord: (record: GameRecord) => void;
   addPlayerGameStats: (stats: PlayerGameStats[]) => void;
   navigate: (screen: Screen) => void;
+  goBack: () => void;
   selectedGameId: string | null;
   setSelectedGameId: (id: string | null) => void;
   setGameConfig: (config: GameConfig) => void;

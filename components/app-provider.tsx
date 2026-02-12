@@ -20,6 +20,7 @@ import { GameScreen } from "@/components/screens/game-screen";
 import { ScoreHistoryScreen } from "@/components/screens/score-history-screen";
 import { GameDetailScreen } from "@/components/screens/game-detail-screen";
 import { LoginScreen } from "@/components/screens/login-screen";
+import { TeamSelectScreen } from "@/components/screens/team-select-screen";
 import { TeamCreateScreen } from "@/components/screens/team-create-screen";
 import { MypageScreen } from "@/components/screens/mypage-screen";
 import { BottomTabs } from "@/components/bottom-tabs";
@@ -28,6 +29,8 @@ function ScreenRouter({ screen }: { screen: Screen }) {
   switch (screen) {
     case "login":
       return <LoginScreen />;
+    case "team-select":
+      return <TeamSelectScreen />;
     case "team-create":
       return <TeamCreateScreen />;
     case "home":
@@ -72,9 +75,22 @@ export function AppProvider({ children }: { children?: ReactNode }) {
   });
 
   const [selectedGameId, setSelectedGameId] = useState<string | null>(null);
+  const [screenHistory, setScreenHistory] = useState<Screen[]>([]);
 
   const navigate = useCallback((screen: Screen) => {
-    setState((s) => ({ ...s, currentScreen: screen }));
+    setState((s) => {
+      setScreenHistory((h) => [...h, s.currentScreen]);
+      return { ...s, currentScreen: screen };
+    });
+  }, []);
+
+  const goBack = useCallback(() => {
+    setScreenHistory((h) => {
+      if (h.length === 0) return h;
+      const prev = h[h.length - 1];
+      setState((s) => ({ ...s, currentScreen: prev }));
+      return h.slice(0, -1);
+    });
   }, []);
 
   const setMyTeam = useCallback((team: Team) => {
@@ -116,7 +132,7 @@ export function AppProvider({ children }: { children?: ReactNode }) {
       ...s,
       isLoggedIn: true,
       userName: name,
-      currentScreen: s.teamCreated ? "home" : "team-create",
+      currentScreen: s.teamCreated ? "home" : "team-select",
     }));
   }, []);
 
@@ -149,6 +165,7 @@ export function AppProvider({ children }: { children?: ReactNode }) {
         addGameRecord,
         addPlayerGameStats,
         navigate,
+        goBack,
         selectedGameId,
         setSelectedGameId,
         setGameConfig,

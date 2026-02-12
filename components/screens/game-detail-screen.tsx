@@ -6,7 +6,7 @@ import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 
 export function GameDetailScreen() {
-  const { state, navigate, selectedGameId } = useAppContext();
+  const { state, navigate, goBack, selectedGameId } = useAppContext();
   const record = state.gameRecords.find((r) => r.id === selectedGameId);
   const [activeTab, setActiveTab] = useState<"score" | "batting" | "pitching">("score");
 
@@ -16,7 +16,7 @@ export function GameDetailScreen() {
         <span className="text-sm text-[hsl(210,20%,50%)]">試合データが見つかりません</span>
         <button
           type="button"
-          onClick={() => navigate("score-history")}
+          onClick={goBack}
           className="mt-4 rounded-xl bg-[hsl(38,100%,45%)] px-6 py-2 text-sm font-bold text-[hsl(210,80%,8%)]"
         >
           戻る
@@ -34,7 +34,7 @@ export function GameDetailScreen() {
       <div className="flex items-center border-b border-[hsl(210,40%,18%)] bg-[hsl(210,60%,8%)] px-3 py-3">
         <button
           type="button"
-          onClick={() => navigate("score-history")}
+          onClick={goBack}
           className="flex items-center gap-1 text-[hsl(210,20%,55%)] active:opacity-70"
         >
           <ArrowLeft size={18} />

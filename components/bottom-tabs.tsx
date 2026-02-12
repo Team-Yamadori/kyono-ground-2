@@ -16,6 +16,7 @@ export function BottomTabs() {
   // Hide bottom tabs on certain screens
   const hideTabsScreens: Screen[] = [
     "login",
+    "team-select",
     "team-create",
     "game",
     "game-setup",

@@ -5,7 +5,7 @@ import { ArrowLeft, Swords } from "lucide-react";
 import { useState } from "react";
 
 export function GameSetupScreen() {
-  const { state, navigate, setOpponent, setGameConfig } = useAppContext();
+  const { state, navigate, goBack, setOpponent, setGameConfig } = useAppContext();
   const { myTeam, opponent } = state;
 
   const [isTopOfInning, setIsTopOfInning] = useState(true); // true=先攻, false=後攻
@@ -22,7 +22,7 @@ export function GameSetupScreen() {
       <div className="flex items-center border-b border-[hsl(210,40%,18%)] bg-[hsl(210,60%,8%)] px-3 py-2.5">
         <button
           type="button"
-          onClick={() => navigate("home")}
+          onClick={goBack}
           className="flex items-center gap-1 text-[hsl(210,20%,55%)] active:opacity-70"
         >
           <ArrowLeft size={18} />

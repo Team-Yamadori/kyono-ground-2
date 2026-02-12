@@ -4,7 +4,7 @@ import { useAppContext } from "@/lib/store";
 import { ArrowLeft, Trophy, ChevronRight } from "lucide-react";
 
 export function ScoreHistoryScreen() {
-  const { state, navigate, setSelectedGameId } = useAppContext();
+  const { state, navigate, goBack, setSelectedGameId } = useAppContext();
   const records = [...state.gameRecords].reverse();
 
   const handleViewDetail = (id: string) => {
@@ -18,7 +18,7 @@ export function ScoreHistoryScreen() {
       <div className="flex items-center border-b border-[hsl(210,40%,18%)] bg-[hsl(210,60%,8%)] px-3 py-3">
         <button
           type="button"
-          onClick={() => navigate("home")}
+          onClick={goBack}
           className="flex items-center gap-1 text-[hsl(210,20%,55%)] active:opacity-70"
         >
           <ArrowLeft size={18} />

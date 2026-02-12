@@ -18,7 +18,7 @@ type DragState =
     };
 
 export function LineupScreen() {
-  const { state, navigate, updateMyTeam } = useAppContext();
+  const { state, navigate, goBack, updateMyTeam } = useAppContext();
   const team = state.myTeam;
   const [dragState, setDragState] = useState<DragState>({ mode: "none" });
   const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -155,7 +155,7 @@ export function LineupScreen() {
         <button
           type="button"
           onClick={() => {
-            if (dragState.mode === "none") navigate("home");
+            if (dragState.mode === "none") goBack();
           }}
           className="flex items-center gap-1 text-[hsl(210,20%,55%)] active:opacity-70"
         >

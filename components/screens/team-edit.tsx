@@ -16,7 +16,7 @@ const TEAM_COLORS = [
 ];
 
 export function TeamEdit() {
-  const { state, updateMyTeam, navigate } = useAppContext();
+  const { state, updateMyTeam, navigate, goBack } = useAppContext();
   const team = state.myTeam;
 
   const [name, setName] = useState(team.name);
@@ -33,7 +33,7 @@ export function TeamEdit() {
       color: TEAM_COLORS[colorIndex].color,
       subColor: TEAM_COLORS[colorIndex].sub,
     }));
-    navigate("home");
+    goBack();
   };
 
   return (
@@ -42,7 +42,7 @@ export function TeamEdit() {
       <div className="flex items-center border-b border-[hsl(210,40%,18%)] bg-[hsl(210,60%,8%)] px-3 py-3">
         <button
           type="button"
-          onClick={() => navigate("home")}
+          onClick={goBack}
           className="flex items-center gap-1 text-[hsl(210,20%,55%)] active:opacity-70"
         >
           <ArrowLeft size={18} />

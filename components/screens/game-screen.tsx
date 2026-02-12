@@ -408,7 +408,7 @@ function PinchRunPanel({
   );
 }
 
-// ===== Defense Change Panel: fielders + bench side by side, drag & drop =====
+// ===== Defense Change Panel: starters left, unified bench right, drag & drop =====
 function DefenseChangePanel({
   team,
   onSubstitute,
@@ -421,24 +421,17 @@ function DefenseChangePanel({
   const lineupPlayers = team.lineup.map((slot) => getPlayer(team, slot.playerId));
   const benchPlayers = team.benchPlayers.map((id) => getPlayer(team, id));
 
-  const [selectedLineup, setSelectedLineup] = useState<number | null>(null);
-  const [selectedBench, setSelectedBench] = useState<number | null>(null);
   const longPressRef = useRef<NodeJS.Timeout | null>(null);
   const [dragging, setDragging] = useState<{ source: "lineup" | "bench"; index: number; x: number; y: number } | null>(null);
   const [hoverTarget, setHoverTarget] = useState<{ source: "lineup" | "bench"; index: number } | null>(null);
 
-  // Position swap mode within fielders
-  const [posSwapMode, setPosSwapMode] = useState(false);
-  const [posSwapFirst, setPosSwapFirst] = useState<number | null>(null);
-
   const clearLP = useCallback(() => { if (longPressRef.current) { clearTimeout(longPressRef.current); longPressRef.current = null; } }, []);
 
   const handlePointerDown = useCallback((e: React.PointerEvent, source: "lineup" | "bench", index: number) => {
-    if (posSwapMode) return; // don't drag in pos swap mode
     e.preventDefault();
     const x = e.clientX, y = e.clientY;
     longPressRef.current = setTimeout(() => { setDragging({ source, index, x, y }); }, 300);
-  }, [posSwapMode]);
+  }, []);
 
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
     if (dragging) setDragging((d) => d ? { ...d, x: e.clientX, y: e.clientY } : null);
@@ -446,12 +439,10 @@ function DefenseChangePanel({
 
   const handlePointerUp = useCallback(() => {
     clearLP();
-    if (dragging && hoverTarget) {
-      if (dragging.source !== hoverTarget.source) {
-        const lineupIdx = dragging.source === "lineup" ? dragging.index : hoverTarget.index;
-        const benchIdx = dragging.source === "bench" ? dragging.index : hoverTarget.index;
-        onSubstitute(lineupIdx, benchIdx);
-      }
+    if (dragging && hoverTarget && dragging.source !== hoverTarget.source) {
+      const lineupIdx = dragging.source === "lineup" ? dragging.index : hoverTarget.index;
+      const benchIdx = dragging.source === "bench" ? dragging.index : hoverTarget.index;
+      onSubstitute(lineupIdx, benchIdx);
     }
     setDragging(null);
     setHoverTarget(null);
@@ -460,12 +451,6 @@ function DefenseChangePanel({
   useEffect(() => () => clearLP(), [clearLP]);
 
   const isDragging = dragging !== null;
-
-  const doConfirm = () => {
-    if (selectedLineup !== null && selectedBench !== null) {
-      onSubstitute(selectedLineup, selectedBench);
-    }
-  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-[hsl(210,80%,4%)]/80"
@@ -477,85 +462,84 @@ function DefenseChangePanel({
             <span className="text-sm font-black text-[hsl(210,80%,65%)]">守備交代</span>
           </div>
           <span className="text-[10px] font-bold text-[hsl(210,20%,45%)]">
-            {isDragging ? "交代先で離す" : "出場選手と控えをドラッグで交代"}
+            {isDragging ? "交代先で離す" : "長押しでドラッグ交代"}
           </span>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-2 py-2">
-          {/* Each lineup slot with bench player options next to it */}
-          <div className="flex flex-col gap-1">
-            {lineupPlayers.map((player, i) => {
-              const isDraggedLineup = dragging?.source === "lineup" && dragging.index === i;
-              const isHoveredLineup = hoverTarget?.source === "lineup" && hoverTarget.index === i;
-              const isSelectedLineup = selectedLineup === i;
-
-              return (
-                <div key={team.lineup[i].playerId} className="flex items-center gap-1">
-                  {/* Lineup player */}
+        {/* Content: starters left, bench right */}
+        <div className="flex flex-1 gap-1.5 overflow-hidden px-1.5 py-2">
+          {/* Starters (left) */}
+          <div className="flex flex-1 flex-col overflow-y-auto">
+            <div className="mb-1 flex items-center gap-1 px-1">
+              <div className="h-px flex-1 bg-[hsl(210,60%,30%)]" />
+              <span className="text-[8px] font-black tracking-wider text-[hsl(210,60%,55%)]">出場中</span>
+              <div className="h-px flex-1 bg-[hsl(210,60%,30%)]" />
+            </div>
+            <div className="flex flex-col gap-1">
+              {lineupPlayers.map((player, i) => {
+                const isDragged = dragging?.source === "lineup" && dragging.index === i;
+                const isHovered = hoverTarget?.source === "lineup" && hoverTarget.index === i && !isDragged;
+                return (
                   <div
+                    key={team.lineup[i].playerId}
                     onPointerDown={(e) => handlePointerDown(e, "lineup", i)}
                     onPointerEnter={() => isDragging && setHoverTarget({ source: "lineup", index: i })}
-                    onClick={() => { if (!isDragging && !posSwapMode) setSelectedLineup(prev => prev === i ? null : i); }}
-                    className={`flex flex-1 items-center gap-2 rounded-lg px-2 py-2 transition-all ${
-                      isDraggedLineup ? "scale-95 opacity-40"
-                      : isHoveredLineup ? "border-2 border-dashed border-[hsl(210,70%,50%)] bg-[hsl(210,30%,14%)]"
-                      : isSelectedLineup ? "border-2 border-[hsl(210,80%,55%)] bg-[hsl(210,40%,14%)]"
+                    className={`flex items-center gap-1.5 rounded-lg px-2 py-2 transition-all ${
+                      isDragged ? "scale-95 opacity-40"
+                      : isHovered ? "border-2 border-dashed border-[hsl(210,70%,50%)] bg-[hsl(210,30%,14%)]"
                       : "border border-[hsl(210,30%,18%)] bg-[hsl(210,50%,10%)]"
                     }`}
                     style={{ touchAction: "none" }}
                   >
-                    <span className="w-4 text-[10px] font-black text-[hsl(38,100%,50%)]">{i + 1}</span>
+                    <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-[hsl(210,40%,18%)]">
+                      <span className="text-[9px] font-black text-[hsl(38,100%,50%)]">{i + 1}</span>
+                    </div>
                     <span className="flex-1 truncate text-[11px] font-bold text-[hsl(48,100%,96%)]">{player?.name ?? "-"}</span>
                     <span className="rounded bg-[hsl(210,50%,20%)] px-1.5 py-0.5 text-[9px] font-black text-[hsl(210,70%,70%)]">
                       {POSITION_SHORT[team.lineup[i].fieldPosition]}
                     </span>
                   </div>
+                );
+              })}
+            </div>
+          </div>
 
-                  {/* Arrow */}
-                  <span className="text-[10px] text-[hsl(210,20%,30%)]">{"<>"}</span>
-
-                  {/* Mini bench list (scrollable horizontally) */}
-                  <div className="flex w-[120px] shrink-0 gap-0.5 overflow-x-auto">
-                    {benchPlayers.map((bp, bi) => {
-                      const isDraggedBench = dragging?.source === "bench" && dragging.index === bi;
-                      const isHoveredBench = hoverTarget?.source === "bench" && hoverTarget.index === bi;
-                      const isSelectedB = selectedLineup === i && selectedBench === bi;
-                      return (
-                        <div
-                          key={team.benchPlayers[bi]}
-                          onPointerDown={(e) => handlePointerDown(e, "bench", bi)}
-                          onPointerEnter={() => isDragging && setHoverTarget({ source: "bench", index: bi })}
-                          onClick={() => {
-                            if (!isDragging && !posSwapMode) {
-                              if (selectedLineup === i) {
-                                setSelectedBench(prev => prev === bi ? null : bi);
-                              } else {
-                                setSelectedLineup(i);
-                                setSelectedBench(bi);
-                              }
-                            }
-                          }}
-                          className={`flex shrink-0 flex-col items-center rounded-md px-1.5 py-1 transition-all ${
-                            isDraggedBench ? "scale-95 opacity-40"
-                            : isHoveredBench ? "border border-dashed border-[hsl(210,70%,50%)] bg-[hsl(210,30%,14%)]"
-                            : isSelectedB ? "border border-[hsl(210,80%,55%)] bg-[hsl(210,40%,14%)]"
-                            : "border border-[hsl(210,25%,16%)] bg-[hsl(210,40%,8%)]"
-                          }`}
-                          style={{ touchAction: "none" }}
-                        >
-                          <span className="max-w-[50px] truncate text-[9px] font-bold text-[hsl(48,100%,90%)]">
-                            {bp?.name?.split(" ").pop() ?? "-"}
-                          </span>
-                          <span className="text-[8px] text-[hsl(210,40%,50%)]">
-                            {bp ? POSITION_SHORT[bp.position] : "-"}
-                          </span>
-                        </div>
-                      );
-                    })}
+          {/* Bench (right) */}
+          <div className="flex w-[110px] shrink-0 flex-col overflow-y-auto">
+            <div className="mb-1 flex items-center gap-1 px-1">
+              <div className="h-px flex-1 bg-[hsl(210,30%,25%)]" />
+              <span className="text-[8px] font-black tracking-wider text-[hsl(210,20%,45%)]">控え</span>
+              <div className="h-px flex-1 bg-[hsl(210,30%,25%)]" />
+            </div>
+            <div className="flex flex-col gap-1">
+              {benchPlayers.map((player, i) => {
+                const isDragged = dragging?.source === "bench" && dragging.index === i;
+                const isHovered = hoverTarget?.source === "bench" && hoverTarget.index === i && !isDragged;
+                return (
+                  <div
+                    key={team.benchPlayers[i]}
+                    onPointerDown={(e) => handlePointerDown(e, "bench", i)}
+                    onPointerEnter={() => isDragging && setHoverTarget({ source: "bench", index: i })}
+                    className={`flex items-center gap-1 rounded-lg px-1.5 py-2 transition-all ${
+                      isDragged ? "scale-95 opacity-40"
+                      : isHovered ? "border-2 border-dashed border-[hsl(210,70%,50%)] bg-[hsl(210,30%,14%)]"
+                      : "border border-[hsl(210,30%,18%)] bg-[hsl(210,50%,10%)]"
+                    }`}
+                    style={{ touchAction: "none" }}
+                  >
+                    <div className="flex flex-1 flex-col overflow-hidden">
+                      <span className="truncate text-[10px] font-black text-[hsl(48,100%,96%)]">{player?.name ?? "-"}</span>
+                      <span className="text-[8px] text-[hsl(210,20%,42%)]">#{player?.number}</span>
+                    </div>
+                    <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-[hsl(210,60%,25%)]">
+                      <span className="text-[9px] font-black text-[hsl(48,100%,96%)]">
+                        {player ? POSITION_SHORT[player.position] : "-"}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
 
@@ -570,18 +554,10 @@ function DefenseChangePanel({
           </div>
         )}
 
-        <div className="flex gap-3 border-t border-[hsl(210,40%,18%)] px-4 py-3">
+        <div className="border-t border-[hsl(210,40%,18%)] px-4 py-3">
           <button type="button" onClick={onClose}
-            className="flex-1 rounded-xl bg-[hsl(210,30%,15%)] py-3 text-sm font-black text-[hsl(210,20%,55%)] active:scale-95">
+            className="w-full rounded-xl bg-[hsl(210,30%,15%)] py-3 text-sm font-black text-[hsl(210,20%,55%)] active:scale-95">
             閉じる
-          </button>
-          <button type="button" onClick={doConfirm}
-            disabled={selectedLineup === null || selectedBench === null}
-            className={`flex-[2] rounded-xl py-3 text-sm font-black active:scale-95 ${
-              selectedLineup !== null && selectedBench !== null
-                ? "bg-[hsl(210,70%,45%)] text-white" : "bg-[hsl(210,25%,15%)] text-[hsl(210,15%,35%)]"
-            }`}>
-            交代する
           </button>
         </div>
       </div>
