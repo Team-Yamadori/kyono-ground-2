@@ -1,13 +1,12 @@
 "use client";
 
 import { useAppContext, type Screen } from "@/lib/store";
-import { Home, Users, Trophy, ClipboardList } from "lucide-react";
+import { Home, Trophy, User } from "lucide-react";
 
 const tabs = [
   { id: "home", label: "ホーム", icon: Home, screen: "home" as Screen },
-  { id: "roster", label: "選手", icon: Users, screen: "roster" as Screen },
-  { id: "lineup", label: "オーダー", icon: ClipboardList, screen: "lineup" as Screen },
   { id: "scores", label: "試合", icon: Trophy, screen: "score-history" as Screen },
+  { id: "mypage", label: "マイページ", icon: User, screen: "mypage" as Screen },
 ];
 
 export function BottomTabs() {
@@ -15,7 +14,16 @@ export function BottomTabs() {
   const currentScreen = state.currentScreen;
 
   // Hide bottom tabs on certain screens
-  const hideTabsScreens: Screen[] = ["game", "game-setup", "team-edit", "game-detail"];
+  const hideTabsScreens: Screen[] = [
+    "login",
+    "team-create",
+    "game",
+    "game-setup",
+    "team-edit",
+    "game-detail",
+    "lineup",
+    "defense",
+  ];
   if (hideTabsScreens.includes(currentScreen)) {
     return null;
   }
@@ -23,9 +31,8 @@ export function BottomTabs() {
   // Determine active tab based on current screen
   const getActiveTab = () => {
     if (currentScreen === "home") return "home";
-    if (currentScreen === "roster") return "roster";
-    if (currentScreen === "lineup" || currentScreen === "defense") return "lineup";
     if (currentScreen === "score-history") return "scores";
+    if (currentScreen === "mypage" || currentScreen === "roster") return "mypage";
     return null;
   };
 

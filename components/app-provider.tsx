@@ -19,10 +19,17 @@ import { GameSetupScreen } from "@/components/screens/game-setup-screen";
 import { GameScreen } from "@/components/screens/game-screen";
 import { ScoreHistoryScreen } from "@/components/screens/score-history-screen";
 import { GameDetailScreen } from "@/components/screens/game-detail-screen";
+import { LoginScreen } from "@/components/screens/login-screen";
+import { TeamCreateScreen } from "@/components/screens/team-create-screen";
+import { MypageScreen } from "@/components/screens/mypage-screen";
 import { BottomTabs } from "@/components/bottom-tabs";
 
 function ScreenRouter({ screen }: { screen: Screen }) {
   switch (screen) {
+    case "login":
+      return <LoginScreen />;
+    case "team-create":
+      return <TeamCreateScreen />;
     case "home":
       return <HomeMenu />;
     case "team-edit":
@@ -43,6 +50,8 @@ function ScreenRouter({ screen }: { screen: Screen }) {
       return <ScoreHistoryScreen />;
     case "game-detail":
       return <GameDetailScreen />;
+    case "mypage":
+      return <MypageScreen />;
     default:
       return <HomeMenu />;
   }
@@ -54,8 +63,12 @@ export function AppProvider({ children }: { children?: ReactNode }) {
     opponent: createRandomOpponent(),
     gameRecords: [],
     playerGameStats: [],
-    currentScreen: "home",
+    currentScreen: "login",
     gameConfig: { isTopOfInning: true, totalInnings: 9 },
+    activeGameState: null,
+    isLoggedIn: false,
+    userName: "",
+    teamCreated: false,
   });
 
   const [selectedGameId, setSelectedGameId] = useState<string | null>(null);
@@ -91,6 +104,41 @@ export function AppProvider({ children }: { children?: ReactNode }) {
     setState((s) => ({ ...s, gameConfig: config }));
   }, []);
 
+  const setActiveGameState = useCallback(
+    (gs: import("@/lib/game-state").GameState | null) => {
+      setState((s) => ({ ...s, activeGameState: gs }));
+    },
+    []
+  );
+
+  const setLogin = useCallback((name: string) => {
+    setState((s) => ({
+      ...s,
+      isLoggedIn: true,
+      userName: name,
+      currentScreen: s.teamCreated ? "home" : "team-create",
+    }));
+  }, []);
+
+  const setTeamCreated = useCallback(() => {
+    setState((s) => ({
+      ...s,
+      teamCreated: true,
+      currentScreen: "home",
+    }));
+  }, []);
+
+  const logout = useCallback(() => {
+    setState((s) => ({
+      ...s,
+      isLoggedIn: false,
+      userName: "",
+      currentScreen: "login",
+    }));
+  }, []);
+
+  const showTabs = state.isLoggedIn && state.teamCreated;
+
   return (
     <AppContext.Provider
       value={{
@@ -104,11 +152,15 @@ export function AppProvider({ children }: { children?: ReactNode }) {
         selectedGameId,
         setSelectedGameId,
         setGameConfig,
+        setActiveGameState,
+        setLogin,
+        setTeamCreated,
+        logout,
       }}
     >
       <>
         <ScreenRouter screen={state.currentScreen} />
-        <BottomTabs />
+        {showTabs && <BottomTabs />}
       </>
     </AppContext.Provider>
   );
