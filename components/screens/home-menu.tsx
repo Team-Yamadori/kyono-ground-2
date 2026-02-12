@@ -1,7 +1,7 @@
 "use client";
 
 import { useAppContext } from "@/lib/store";
-import { createRandomOpponent, POSITION_SHORT, formatAvg, getPlayer } from "@/lib/team-data";
+import { createRandomOpponent, POSITION_SHORT, getPlayer } from "@/lib/team-data";
 import { Swords, Users, Trophy, ClipboardList } from "lucide-react";
 
 const menuItems = [
@@ -50,7 +50,7 @@ export function HomeMenu() {
   // Preview: first 4 starters
   const starterPreview = myTeam.lineup.slice(0, 4).map((slot, i) => {
     const p = getPlayer(myTeam, slot.playerId);
-    return { order: i + 1, pos: POSITION_SHORT[slot.fieldPosition], name: p?.name ?? "-", avg: p ? formatAvg(p.avg) : "-" };
+    return { order: i + 1, pos: POSITION_SHORT[slot.fieldPosition], name: p?.name ?? "-" };
   });
 
   const handleGameStart = () => {
@@ -61,15 +61,15 @@ export function HomeMenu() {
   return (
     <div className="flex min-h-dvh flex-col bg-[hsl(210,70%,6%)]">
       {/* Header */}
-      <div className="relative flex flex-col items-center px-4 pb-4 pt-8">
-        <div className="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-transparent via-[hsl(38,100%,50%)] to-transparent" />
-        <div className="mb-0.5 text-[10px] font-bold tracking-[0.3em] text-[hsl(38,100%,50%)]">
+      <div className="relative flex flex-col items-center px-4 pb-3 pt-6">
+        <div className="absolute left-0 right-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-[hsl(38,100%,50%)] to-transparent" />
+        <div className="mb-0.5 text-[9px] font-bold tracking-[0.3em] text-[hsl(38,100%,50%)]">
           KYONO GROUND
         </div>
-        <h1 className="text-xl font-black text-[hsl(48,100%,96%)]">
+        <h1 className="text-lg font-black text-[hsl(48,100%,96%)]">
           {"パワプロ風スコアボード"}
         </h1>
-        <div className="mt-1.5 h-0.5 w-12 bg-[hsl(38,100%,50%)]" />
+        <div className="mt-1 h-0.5 w-10 bg-[hsl(38,100%,50%)]" />
       </div>
 
       {/* My Team Card */}
@@ -98,14 +98,13 @@ export function HomeMenu() {
             <div key={s.order} className="flex flex-col items-center border-r border-[hsl(210,30%,14%)] py-2 last:border-r-0">
               <span className="text-[8px] text-[hsl(38,100%,50%)]">{s.order}番 {s.pos}</span>
               <span className="text-[10px] font-bold text-[hsl(48,100%,96%)]">{s.name.split(" ").pop()}</span>
-              <span className="text-[9px] tabular-nums text-[hsl(120,50%,55%)]">{s.avg}</span>
             </div>
           ))}
         </div>
       </div>
 
       {/* Menu Items */}
-      <div className="flex flex-1 flex-col gap-2 px-4 pb-6">
+      <div className="flex flex-1 flex-col gap-2 px-4 pb-4">
         {menuItems.map((item) => {
           const Icon = item.icon;
           const isGame = item.id === "game";
@@ -156,8 +155,8 @@ export function HomeMenu() {
         })}
       </div>
 
-      <div className="flex items-center justify-center pb-4">
-        <span className="text-[9px] text-[hsl(210,15%,30%)]">v2.0</span>
+      <div className="flex items-center justify-center pb-3">
+        <span className="text-[9px] text-[hsl(210,15%,30%)]">v3.0</span>
       </div>
     </div>
   );

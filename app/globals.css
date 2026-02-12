@@ -69,3 +69,29 @@ body {
     opacity: 1;
   }
 }
+
+/* Mobile app-like scrollbar */
+::-webkit-scrollbar {
+  width: 3px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(210, 30%, 25%);
+  border-radius: 4px;
+}
+
+/* Prevent text selection for app-like feel */
+button, [role="button"] {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Safe area padding for real devices */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
