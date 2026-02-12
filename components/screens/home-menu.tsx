@@ -25,17 +25,15 @@ export function HomeMenu() {
   const hasLiveGame = activeGameState && !activeGameState.isGameOver;
 
   return (
-    <div className="flex min-h-dvh flex-col bg-[hsl(210,70%,6%)] pb-16">
+    <div className="flex min-h-dvh flex-col bg-[#F8F9FB] pb-16">
       {/* Header */}
-      <div className="relative flex flex-col items-center px-4 pb-3 pt-6">
-        <div className="absolute left-0 right-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-[hsl(38,100%,50%)] to-transparent" />
-        <div className="mb-0.5 text-[9px] font-bold tracking-[0.3em] text-[hsl(38,100%,50%)]">
+      <div className="flex flex-col items-center px-4 pb-3 pt-6">
+        <div className="mb-0.5 text-[9px] font-bold tracking-[0.3em] text-[#2563EB]">
           KYONO GROUND
         </div>
-        <h1 className="text-lg font-black text-[hsl(48,100%,96%)]">
-          {"パワプロ風スコアボード"}
+        <h1 className="text-lg font-black text-[#1A1D23]">
+          {"スコアブック"}
         </h1>
-        <div className="mt-1 h-0.5 w-10 bg-[hsl(38,100%,50%)]" />
       </div>
 
       {/* Active Game Card */}
@@ -44,23 +42,21 @@ export function HomeMenu() {
           <button
             type="button"
             onClick={handleResumeGame}
-            className="w-full overflow-hidden rounded-xl border-2 border-[hsl(0,70%,40%)] bg-[hsl(0,40%,10%)] transition-all active:scale-[0.98]"
+            className="w-full overflow-hidden rounded-xl border border-[#FCA5A5] bg-white shadow-sm transition-all active:scale-[0.98]"
           >
             {/* Live badge */}
-            <div className="flex items-center justify-between border-b border-[hsl(0,50%,20%)] px-3 py-1.5">
+            <div className="flex items-center justify-between border-b border-[#FEE2E2] px-3 py-1.5">
               <div className="flex items-center gap-1.5">
                 <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[hsl(0,85%,55%)] opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-[hsl(0,85%,55%)]" />
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#DC2626] opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-[#DC2626]" />
                 </span>
-                <span className="text-[10px] font-black text-[hsl(0,85%,65%)]">LIVE</span>
+                <span className="text-[10px] font-black text-[#DC2626]">LIVE</span>
               </div>
-              <div className="flex items-center gap-1">
-                <span className="text-[10px] font-bold text-[hsl(210,20%,50%)]">
-                  {activeGameState!.isTop ? "表" : "裏"} {activeGameState!.inning}{"回"}
-                </span>
-              </div>
-              <div className="flex items-center gap-1 text-[hsl(0,85%,65%)]">
+              <span className="text-[10px] font-bold text-[#6B7280]">
+                {activeGameState!.isTop ? "表" : "裏"} {activeGameState!.inning}{"回"}
+              </span>
+              <div className="flex items-center gap-1 text-[#DC2626]">
                 <Play size={10} fill="currentColor" />
                 <span className="text-[10px] font-black">{"続きから"}</span>
               </div>
@@ -75,13 +71,13 @@ export function HomeMenu() {
                 >
                   {activeGameState!.away.shortName}
                 </div>
-                <span className="text-2xl font-black tabular-nums text-[hsl(48,100%,96%)]">
+                <span className="text-2xl font-black tabular-nums text-[#1A1D23]">
                   {activeGameState!.away.runs}
                 </span>
               </div>
-              <span className="text-sm font-bold text-[hsl(210,20%,40%)]">-</span>
+              <span className="text-sm font-bold text-[#D1D5DB]">-</span>
               <div className="flex items-center gap-2">
-                <span className="text-2xl font-black tabular-nums text-[hsl(48,100%,96%)]">
+                <span className="text-2xl font-black tabular-nums text-[#1A1D23]">
                   {activeGameState!.home.runs}
                 </span>
                 <div
@@ -93,12 +89,12 @@ export function HomeMenu() {
               </div>
             </div>
 
-            {/* Count/Outs mini display */}
-            <div className="flex items-center justify-center gap-4 border-t border-[hsl(0,50%,20%)] px-3 py-1.5">
-              <span className="text-[9px] text-[hsl(210,20%,50%)]">
+            {/* Count/Outs mini */}
+            <div className="flex items-center justify-center gap-4 border-t border-[#FEE2E2] px-3 py-1.5">
+              <span className="text-[9px] text-[#6B7280]">
                 B{activeGameState!.balls} S{activeGameState!.strikes} O{activeGameState!.outs}
               </span>
-              <span className="text-[9px] text-[hsl(210,20%,50%)]">
+              <span className="text-[9px] text-[#6B7280]">
                 {"塁:"}{" "}
                 {[
                   activeGameState!.bases[0] ? "1" : "",
@@ -114,8 +110,8 @@ export function HomeMenu() {
       ) : null}
 
       {/* My Team Card */}
-      <div className="mx-4 mb-3 overflow-hidden rounded-xl border border-[hsl(210,30%,20%)] bg-[hsl(210,50%,9%)]">
-        <div className="flex items-center gap-3 border-b border-[hsl(210,30%,16%)] px-4 py-2.5">
+      <div className="mx-4 mb-3 overflow-hidden rounded-xl border border-[#E5E7EB] bg-white shadow-sm">
+        <div className="flex items-center gap-3 border-b border-[#F3F4F6] px-4 py-2.5">
           <div
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-xs font-black text-white"
             style={{ backgroundColor: myTeam.color }}
@@ -123,19 +119,19 @@ export function HomeMenu() {
             {myTeam.shortName}
           </div>
           <div className="flex-1">
-            <span className="text-sm font-black text-[hsl(48,100%,96%)]">{myTeam.name}</span>
-            <span className="ml-2 text-[10px] text-[hsl(210,20%,45%)]">
+            <span className="text-sm font-black text-[#1A1D23]">{myTeam.name}</span>
+            <span className="ml-2 text-[10px] text-[#9CA3AF]">
               {myTeam.players.length}{"名"}
             </span>
           </div>
         </div>
         <div className="grid grid-cols-4 gap-0">
           {starterPreview.map((s) => (
-            <div key={s.order} className="flex flex-col items-center border-r border-[hsl(210,30%,14%)] py-2 last:border-r-0">
-              <span className="text-[8px] text-[hsl(38,100%,50%)]">
+            <div key={s.order} className="flex flex-col items-center border-r border-[#F3F4F6] py-2 last:border-r-0">
+              <span className="text-[8px] font-bold text-[#2563EB]">
                 {s.order}{"番"} {s.pos}
               </span>
-              <span className="text-[10px] font-bold text-[hsl(48,100%,96%)]">
+              <span className="text-[10px] font-bold text-[#1A1D23]">
                 {s.name.split(" ").pop()}
               </span>
             </div>
@@ -148,15 +144,15 @@ export function HomeMenu() {
         <button
           type="button"
           onClick={handleNewGame}
-          className="flex w-full items-center justify-center gap-2 rounded-xl border border-[hsl(0,60%,30%)] bg-[hsl(0,50%,14%)] py-3.5 transition-all active:scale-[0.98]"
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#2563EB] py-3.5 shadow-md transition-all active:scale-[0.98]"
         >
-          <Swords size={18} className="text-[hsl(0,85%,65%)]" />
-          <span className="text-sm font-black text-[hsl(0,85%,65%)]">{"新しい試合を始める"}</span>
+          <Swords size={18} className="text-white" />
+          <span className="text-sm font-black text-white">{"新しい試合を始める"}</span>
         </button>
       </div>
 
       <div className="mt-auto flex items-center justify-center pb-3">
-        <span className="text-[9px] text-[hsl(210,15%,30%)]">v4.0</span>
+        <span className="text-[9px] text-[#D1D5DB]">v5.0</span>
       </div>
     </div>
   );

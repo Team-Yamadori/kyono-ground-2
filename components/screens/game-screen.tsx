@@ -29,14 +29,14 @@ function TimeoutMenu({
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-[hsl(210,80%,4%)]/80">
-      <div className="w-full max-w-md animate-[slideUp_0.2s_ease-out] rounded-t-2xl border-t-2 border-[hsl(38,100%,40%)] bg-[hsl(210,50%,8%)]">
-        <div className="flex items-center justify-between border-b border-[hsl(210,40%,18%)] px-4 py-3">
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/30">
+      <div className="w-full max-w-md animate-[slideUp_0.2s_ease-out] rounded-t-2xl border-t-2 border-[#E5E7EB] bg-white">
+        <div className="flex items-center justify-between border-b border-[#E5E7EB] px-4 py-3">
           <div className="flex items-center gap-2">
-            <Clock size={14} className="text-[hsl(38,100%,50%)]" />
-            <span className="text-sm font-black text-[hsl(38,100%,55%)]">タイム</span>
+            <Clock size={14} className="text-[#2563EB]" />
+            <span className="text-sm font-black text-[#2563EB]">タイム</span>
           </div>
-          <button type="button" onClick={onClose} className="rounded-full p-1 text-[hsl(210,20%,50%)] active:bg-[hsl(210,30%,15%)]">
+          <button type="button" onClick={onClose} className="rounded-full p-1 text-[#6B7280] active:bg-[hsl(210,30%,15%)]">
             <X size={18} />
           </button>
         </div>
@@ -57,7 +57,7 @@ function TimeoutMenu({
               >
                 <Icon size={20} style={{ color: item.disabled ? "hsl(210,15%,30%)" : item.color }} />
                 <div className="flex flex-col items-start">
-                  <span className={`text-sm font-black ${item.disabled ? "text-[hsl(210,15%,30%)]" : "text-[hsl(48,100%,96%)]"}`}>{item.label}</span>
+                  <span className={`text-sm font-black ${item.disabled ? "text-[hsl(210,15%,30%)]" : "text-[#1A1D23]"}`}>{item.label}</span>
                   <span className="text-[8px] font-bold tracking-wider text-[hsl(210,20%,40%)]">{item.sub}</span>
                 </div>
                 {item.disabled && (
@@ -124,21 +124,21 @@ function PinchHitPanel({
   useEffect(() => () => clearLP(), [clearLP]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-[hsl(210,80%,4%)]/80"
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/30"
       onPointerMove={handlePointerMove} onPointerUp={handlePointerUp}>
-      <div className="flex max-h-[80vh] w-full max-w-md animate-[slideUp_0.25s_ease-out] flex-col rounded-t-2xl border-t-2 border-[hsl(0,85%,55%)] bg-[hsl(210,50%,8%)]">
-        <div className="flex items-center justify-between border-b border-[hsl(210,40%,18%)] px-4 py-2.5">
+      <div className="flex max-h-[80vh] w-full max-w-md animate-[slideUp_0.25s_ease-out] flex-col rounded-t-2xl border-t-2 border-[hsl(0,85%,55%)] bg-white">
+        <div className="flex items-center justify-between border-b border-[#E5E7EB] px-4 py-2.5">
           <div className="flex items-center gap-2">
             <UserRoundPlus size={14} className="text-[hsl(0,85%,55%)]" />
             <span className="text-sm font-black text-[hsl(0,85%,65%)]">代打</span>
           </div>
-          <span className="text-[10px] font-bold text-[hsl(210,20%,45%)]">
+          <span className="text-[10px] font-bold text-[#9CA3AF]">
             {dragging ? "打者の上で離す" : "控えを長押しして打者へドラッグ"}
           </span>
         </div>
 
         {/* Current batter (drop target) */}
-        <div className="border-b border-[hsl(210,40%,18%)] px-3 py-3">
+        <div className="border-b border-[#E5E7EB] px-3 py-3">
           <div className="mb-1 text-[9px] font-bold tracking-wider text-[hsl(0,85%,55%)]">現在の打者</div>
           <div
             onPointerEnter={() => dragging && setHoverBatter(true)}
@@ -146,13 +146,13 @@ function PinchHitPanel({
             className={`flex items-center gap-3 rounded-xl border-2 px-4 py-3 transition-all ${
               hoverBatter
                 ? "border-dashed border-[hsl(0,70%,50%)] bg-[hsl(0,30%,12%)] scale-[1.02]"
-                : "border-[hsl(210,30%,20%)] bg-[hsl(210,50%,10%)]"
+                : "border-[hsl(210,30%,20%)] bg-[#F8F9FB]"
             }`}
           >
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[hsl(0,70%,20%)] text-sm font-black text-[hsl(0,85%,65%)]">
               {currentBatterIndex + 1}
             </span>
-            <span className="flex-1 text-sm font-bold text-[hsl(48,100%,96%)]">{batterPlayer?.name ?? "-"}</span>
+            <span className="flex-1 text-sm font-bold text-[#1A1D23]">{batterPlayer?.name ?? "-"}</span>
             <span className="rounded bg-[hsl(210,40%,18%)] px-2 py-0.5 text-[10px] font-bold text-[hsl(210,60%,65%)]">
               {POSITION_SHORT[batter.fieldPosition]}
             </span>
@@ -161,7 +161,7 @@ function PinchHitPanel({
 
         {/* Bench players (drag sources) */}
         <div className="flex-1 overflow-y-auto px-3 py-2">
-          <div className="mb-1 text-[9px] font-bold tracking-wider text-[hsl(210,20%,50%)]">控え</div>
+          <div className="mb-1 text-[9px] font-bold tracking-wider text-[#6B7280]">控え</div>
           <div className="flex flex-col gap-1">
             {benchPlayers.map((player, i) => {
               const isDragged = dragging?.index === i;
@@ -174,12 +174,12 @@ function PinchHitPanel({
                   className={`flex items-center gap-2 rounded-lg px-3 py-2.5 transition-all ${
                     isDragged ? "scale-95 opacity-40"
                     : isSelected ? "border-2 border-[hsl(0,70%,50%)] bg-[hsl(0,25%,12%)]"
-                    : "border border-[hsl(210,30%,18%)] bg-[hsl(210,50%,10%)]"
+                    : "border border-[hsl(210,30%,18%)] bg-[#F8F9FB]"
                   }`}
                   style={{ touchAction: "none" }}
                 >
                   <GripVertical size={14} className="text-[hsl(210,20%,30%)]" />
-                  <span className="flex-1 text-[11px] font-bold text-[hsl(48,100%,96%)]">{player?.name ?? "-"}</span>
+                  <span className="flex-1 text-[11px] font-bold text-[#1A1D23]">{player?.name ?? "-"}</span>
                   <span className="text-[10px] font-bold text-[hsl(210,60%,65%)]">
                     {player ? POSITION_SHORT[player.position] : "-"}
                   </span>
@@ -192,11 +192,11 @@ function PinchHitPanel({
         {dragging && (
           <div className="pointer-events-none fixed z-[60] rounded-lg border-2 border-[hsl(0,85%,55%)] bg-[hsl(0,20%,12%)] px-3 py-2 shadow-2xl opacity-90"
             style={{ left: dragging.x - 60, top: dragging.y - 20 }}>
-            <span className="text-[11px] font-black text-[hsl(48,100%,96%)]">{benchPlayers[dragging.index]?.name}</span>
+            <span className="text-[11px] font-black text-[#1A1D23]">{benchPlayers[dragging.index]?.name}</span>
           </div>
         )}
 
-        <div className="flex gap-3 border-t border-[hsl(210,40%,18%)] px-4 py-3">
+        <div className="flex gap-3 border-t border-[#E5E7EB] px-4 py-3">
           <button type="button" onClick={onClose}
             className="flex-1 rounded-xl bg-[hsl(210,30%,15%)] py-3 text-sm font-black text-[hsl(210,20%,55%)] active:scale-95">
             キャンセル
@@ -294,22 +294,22 @@ function PinchRunPanel({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-[hsl(210,80%,4%)]/80"
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/30"
       onPointerMove={handlePointerMove} onPointerUp={handlePointerUp}>
-      <div className="flex max-h-[80vh] w-full max-w-md animate-[slideUp_0.25s_ease-out] flex-col rounded-t-2xl border-t-2 border-[hsl(120,60%,45%)] bg-[hsl(210,50%,8%)]">
-        <div className="flex items-center justify-between border-b border-[hsl(210,40%,18%)] px-4 py-2.5">
+      <div className="flex max-h-[80vh] w-full max-w-md animate-[slideUp_0.25s_ease-out] flex-col rounded-t-2xl border-t-2 border-[hsl(120,60%,45%)] bg-white">
+        <div className="flex items-center justify-between border-b border-[#E5E7EB] px-4 py-2.5">
           <div className="flex items-center gap-2">
             <Footprints size={14} className="text-[hsl(120,60%,45%)]" />
             <span className="text-sm font-black text-[hsl(120,60%,55%)]">代走</span>
           </div>
-          <span className="text-[10px] font-bold text-[hsl(210,20%,45%)]">
+          <span className="text-[10px] font-bold text-[#9CA3AF]">
             {isDragging ? "交代先で離す" : "長押しでドラッグ / タップで選択"}
           </span>
         </div>
 
         <div className="flex-1 overflow-y-auto">
           {/* Runners on base */}
-          <div className="border-b border-[hsl(210,40%,18%)] px-3 py-2">
+          <div className="border-b border-[#E5E7EB] px-3 py-2">
             <div className="mb-1 text-[9px] font-bold tracking-wider text-[hsl(120,60%,45%)]">塁上のランナー</div>
             <div className="flex flex-col gap-1">
               {runnerBases.map((rb, i) => {
@@ -329,14 +329,14 @@ function PinchRunPanel({
                       isDragged ? "scale-95 opacity-40"
                       : isHovered ? "border-dashed border-[hsl(120,50%,40%)] bg-[hsl(120,15%,10%)]"
                       : isSelected ? "border-[hsl(120,60%,45%)] bg-[hsl(120,20%,12%)]"
-                      : "border-[hsl(210,30%,20%)] bg-[hsl(210,50%,10%)]"
+                      : "border-[hsl(210,30%,20%)] bg-[#F8F9FB]"
                     }`}
                     style={{ touchAction: "none" }}
                   >
                     <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[hsl(120,30%,18%)] text-[10px] font-black text-[hsl(120,60%,55%)]">
                       {rb.baseIndex + 1}塁
                     </span>
-                    <span className="flex-1 text-[11px] font-bold text-[hsl(48,100%,96%)]">{player?.name ?? "-"}</span>
+                    <span className="flex-1 text-[11px] font-bold text-[#1A1D23]">{player?.name ?? "-"}</span>
                     <GripVertical size={14} className="text-[hsl(210,20%,30%)]" />
                   </div>
                 );
@@ -346,7 +346,7 @@ function PinchRunPanel({
 
           {/* Bench */}
           <div className="px-3 py-2">
-            <div className="mb-1 text-[9px] font-bold tracking-wider text-[hsl(210,20%,50%)]">控え</div>
+            <div className="mb-1 text-[9px] font-bold tracking-wider text-[#6B7280]">控え</div>
             <div className="flex flex-col gap-1">
               {benchPlayers.map((player, i) => {
                 const isDragged = dragging?.source === "bench" && dragging.index === i;
@@ -362,12 +362,12 @@ function PinchRunPanel({
                       isDragged ? "scale-95 opacity-40"
                       : isHovered ? "border-2 border-dashed border-[hsl(120,50%,40%)] bg-[hsl(120,15%,10%)]"
                       : isSelected ? "border-2 border-[hsl(120,50%,45%)] bg-[hsl(120,20%,12%)]"
-                      : "border border-[hsl(210,30%,18%)] bg-[hsl(210,50%,10%)]"
+                      : "border border-[hsl(210,30%,18%)] bg-[#F8F9FB]"
                     }`}
                     style={{ touchAction: "none" }}
                   >
                     <GripVertical size={14} className="text-[hsl(210,20%,30%)]" />
-                    <span className="flex-1 text-[11px] font-bold text-[hsl(48,100%,96%)]">{player?.name ?? "-"}</span>
+                    <span className="flex-1 text-[11px] font-bold text-[#1A1D23]">{player?.name ?? "-"}</span>
                     <span className="text-[10px] font-bold text-[hsl(210,60%,65%)]">
                       {player ? POSITION_SHORT[player.position] : "-"}
                     </span>
@@ -381,7 +381,7 @@ function PinchRunPanel({
         {dragging && (
           <div className="pointer-events-none fixed z-[60] rounded-lg border-2 border-[hsl(120,60%,45%)] bg-[hsl(120,15%,10%)] px-3 py-2 shadow-2xl opacity-90"
             style={{ left: dragging.x - 60, top: dragging.y - 20 }}>
-            <span className="text-[11px] font-black text-[hsl(48,100%,96%)]">
+            <span className="text-[11px] font-black text-[#1A1D23]">
               {dragging.source === "runner"
                 ? lineupPlayers[Math.min(runnerBases[dragging.index]?.baseIndex ?? 0, team.lineup.length - 1)]?.name
                 : benchPlayers[dragging.index]?.name}
@@ -389,7 +389,7 @@ function PinchRunPanel({
           </div>
         )}
 
-        <div className="flex gap-3 border-t border-[hsl(210,40%,18%)] px-4 py-3">
+        <div className="flex gap-3 border-t border-[#E5E7EB] px-4 py-3">
           <button type="button" onClick={onClose}
             className="flex-1 rounded-xl bg-[hsl(210,30%,15%)] py-3 text-sm font-black text-[hsl(210,20%,55%)] active:scale-95">
             キャンセル
@@ -453,15 +453,15 @@ function DefenseChangePanel({
   const isDragging = dragging !== null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-[hsl(210,80%,4%)]/80"
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/30"
       onPointerMove={handlePointerMove} onPointerUp={handlePointerUp}>
-      <div className="flex max-h-[85vh] w-full max-w-md animate-[slideUp_0.25s_ease-out] flex-col rounded-t-2xl border-t-2 border-[hsl(210,80%,55%)] bg-[hsl(210,50%,8%)]">
-        <div className="flex items-center justify-between border-b border-[hsl(210,40%,18%)] px-4 py-2.5">
+      <div className="flex max-h-[85vh] w-full max-w-md animate-[slideUp_0.25s_ease-out] flex-col rounded-t-2xl border-t-2 border-[hsl(210,80%,55%)] bg-white">
+        <div className="flex items-center justify-between border-b border-[#E5E7EB] px-4 py-2.5">
           <div className="flex items-center gap-2">
             <Shield size={14} className="text-[hsl(210,80%,55%)]" />
             <span className="text-sm font-black text-[hsl(210,80%,65%)]">守備交代</span>
           </div>
-          <span className="text-[10px] font-bold text-[hsl(210,20%,45%)]">
+          <span className="text-[10px] font-bold text-[#9CA3AF]">
             {isDragging ? "交代先で離す" : "長押しでドラッグ交代"}
           </span>
         </div>
@@ -487,14 +487,14 @@ function DefenseChangePanel({
                     className={`flex items-center gap-1.5 rounded-lg px-2 py-2 transition-all ${
                       isDragged ? "scale-95 opacity-40"
                       : isHovered ? "border-2 border-dashed border-[hsl(210,70%,50%)] bg-[hsl(210,30%,14%)]"
-                      : "border border-[hsl(210,30%,18%)] bg-[hsl(210,50%,10%)]"
+                      : "border border-[hsl(210,30%,18%)] bg-[#F8F9FB]"
                     }`}
                     style={{ touchAction: "none" }}
                   >
                     <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-[hsl(210,40%,18%)]">
-                      <span className="text-[9px] font-black text-[hsl(38,100%,50%)]">{i + 1}</span>
+                      <span className="text-[9px] font-black text-[#2563EB]">{i + 1}</span>
                     </div>
-                    <span className="flex-1 truncate text-[11px] font-bold text-[hsl(48,100%,96%)]">{player?.name ?? "-"}</span>
+                    <span className="flex-1 truncate text-[11px] font-bold text-[#1A1D23]">{player?.name ?? "-"}</span>
                     <span className="rounded bg-[hsl(210,50%,20%)] px-1.5 py-0.5 text-[9px] font-black text-[hsl(210,70%,70%)]">
                       {POSITION_SHORT[team.lineup[i].fieldPosition]}
                     </span>
@@ -508,7 +508,7 @@ function DefenseChangePanel({
           <div className="flex w-[110px] shrink-0 flex-col overflow-y-auto">
             <div className="mb-1 flex items-center gap-1 px-1">
               <div className="h-px flex-1 bg-[hsl(210,30%,25%)]" />
-              <span className="text-[8px] font-black tracking-wider text-[hsl(210,20%,45%)]">控え</span>
+              <span className="text-[8px] font-black tracking-wider text-[#9CA3AF]">控え</span>
               <div className="h-px flex-1 bg-[hsl(210,30%,25%)]" />
             </div>
             <div className="flex flex-col gap-1">
@@ -523,16 +523,16 @@ function DefenseChangePanel({
                     className={`flex items-center gap-1 rounded-lg px-1.5 py-2 transition-all ${
                       isDragged ? "scale-95 opacity-40"
                       : isHovered ? "border-2 border-dashed border-[hsl(210,70%,50%)] bg-[hsl(210,30%,14%)]"
-                      : "border border-[hsl(210,30%,18%)] bg-[hsl(210,50%,10%)]"
+                      : "border border-[hsl(210,30%,18%)] bg-[#F8F9FB]"
                     }`}
                     style={{ touchAction: "none" }}
                   >
                     <div className="flex flex-1 flex-col overflow-hidden">
-                      <span className="truncate text-[10px] font-black text-[hsl(48,100%,96%)]">{player?.name ?? "-"}</span>
+                      <span className="truncate text-[10px] font-black text-[#1A1D23]">{player?.name ?? "-"}</span>
                       <span className="text-[8px] text-[hsl(210,20%,42%)]">#{player?.number}</span>
                     </div>
                     <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-[hsl(210,60%,25%)]">
-                      <span className="text-[9px] font-black text-[hsl(48,100%,96%)]">
+                      <span className="text-[9px] font-black text-[#1A1D23]">
                         {player ? POSITION_SHORT[player.position] : "-"}
                       </span>
                     </div>
@@ -546,7 +546,7 @@ function DefenseChangePanel({
         {dragging && (
           <div className="pointer-events-none fixed z-[60] rounded-lg border-2 border-[hsl(210,80%,55%)] bg-[hsl(210,40%,12%)] px-3 py-2 shadow-2xl opacity-90"
             style={{ left: dragging.x - 60, top: dragging.y - 20 }}>
-            <span className="text-[11px] font-black text-[hsl(48,100%,96%)]">
+            <span className="text-[11px] font-black text-[#1A1D23]">
               {dragging.source === "lineup"
                 ? lineupPlayers[dragging.index]?.name
                 : benchPlayers[dragging.index]?.name}
@@ -554,7 +554,7 @@ function DefenseChangePanel({
           </div>
         )}
 
-        <div className="border-t border-[hsl(210,40%,18%)] px-4 py-3">
+        <div className="border-t border-[#E5E7EB] px-4 py-3">
           <button type="button" onClick={onClose}
             className="w-full rounded-xl bg-[hsl(210,30%,15%)] py-3 text-sm font-black text-[hsl(210,20%,55%)] active:scale-95">
             閉じる
@@ -675,7 +675,7 @@ export function GameScreen() {
   return (
     <div className="relative flex min-h-dvh flex-col bg-[hsl(210,70%,8%)]">
       {/* Top Bar */}
-      <div className="flex items-center justify-between border-b border-[hsl(210,40%,18%)] bg-[hsl(210,60%,6%)] px-3 py-2">
+      <div className="flex items-center justify-between border-b border-[#E5E7EB] bg-[hsl(210,60%,6%)] px-3 py-2">
         <button
           type="button"
           onClick={() => navigate("home")}
@@ -687,7 +687,7 @@ export function GameScreen() {
         <button
           type="button"
           onClick={() => setTimeoutMenu(true)}
-          className="flex items-center gap-1.5 rounded-lg border border-[hsl(38,60%,30%)] bg-[hsl(38,30%,12%)] px-3 py-1.5 text-[10px] font-black text-[hsl(38,100%,55%)] active:bg-[hsl(38,30%,18%)]"
+          className="flex items-center gap-1.5 rounded-lg border border-[hsl(38,60%,30%)] bg-[hsl(38,30%,12%)] px-3 py-1.5 text-[10px] font-black text-[#2563EB] active:bg-[hsl(38,30%,18%)]"
         >
           <Clock size={13} />
           タイム
@@ -706,18 +706,18 @@ export function GameScreen() {
                 <polygon points="5,6 10,0 0,0" fill={!gameState.isTop ? "hsl(38, 100%, 50%)" : "hsl(210, 30%, 40%)"} />
               </svg>
             </div>
-            <span className="text-xl font-black text-[hsl(38,100%,50%)]">{gameState.inning}</span>
+            <span className="text-xl font-black text-[#2563EB]">{gameState.inning}</span>
           </div>
           <div className="flex flex-1 items-center justify-center gap-4 px-3">
             <div className="flex items-center gap-2">
               <span className={`rounded px-1.5 py-0.5 text-[10px] font-bold text-white ${gameState.isTop ? "bg-[hsl(0,75%,45%)]" : "bg-[hsl(0,75%,45%)]/60"}`}>
                 {gameState.away.shortName}
               </span>
-              <span className="text-2xl font-black tabular-nums text-[hsl(48,100%,96%)]">{gameState.away.runs}</span>
+              <span className="text-2xl font-black tabular-nums text-[#1A1D23]">{gameState.away.runs}</span>
             </div>
             <span className="text-sm font-bold text-[hsl(210,20%,40%)]">-</span>
             <div className="flex items-center gap-2">
-              <span className="text-2xl font-black tabular-nums text-[hsl(48,100%,96%)]">{gameState.home.runs}</span>
+              <span className="text-2xl font-black tabular-nums text-[#1A1D23]">{gameState.home.runs}</span>
               <span className={`rounded px-1.5 py-0.5 text-[10px] font-bold text-white ${!gameState.isTop ? "bg-[hsl(210,80%,40%)]" : "bg-[hsl(210,80%,40%)]/60"}`}>
                 {gameState.home.shortName}
               </span>
@@ -776,16 +776,16 @@ export function GameScreen() {
       {message && (
         <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center">
           <div className="animate-bounce rounded-2xl border-4 border-[hsl(38,100%,50%)] bg-[hsl(210,80%,8%)] px-8 py-4 shadow-[0_0_60px_hsl(38,100%,50%,0.5)]">
-            <span className="text-2xl font-black text-[hsl(38,100%,50%)]">{message}</span>
+            <span className="text-2xl font-black text-[#2563EB]">{message}</span>
           </div>
         </div>
       )}
 
       {gameState.isGameOver && (
-        <div className="pointer-events-none fixed inset-0 z-40 flex items-center justify-center bg-[hsl(210,80%,4%)]/80">
+        <div className="pointer-events-none fixed inset-0 z-40 flex items-center justify-center bg-black/30">
           <div className="pointer-events-auto flex flex-col items-center gap-4">
-            <span className="text-4xl font-black text-[hsl(38,100%,50%)]">GAME SET</span>
-            <div className="flex items-center gap-4 text-xl font-black text-[hsl(48,100%,96%)]">
+            <span className="text-4xl font-black text-[#2563EB]">GAME SET</span>
+            <div className="flex items-center gap-4 text-xl font-black text-[#1A1D23]">
               <span>{gameState.away.shortName} {gameState.away.runs}</span>
               <span className="text-[hsl(210,20%,40%)]">-</span>
               <span>{gameState.home.runs} {gameState.home.shortName}</span>

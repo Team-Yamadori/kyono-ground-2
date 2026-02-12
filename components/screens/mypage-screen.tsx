@@ -26,7 +26,7 @@ export function MypageScreen() {
     },
     {
       label: "チーム編集",
-      desc: "チーム名・選手の管理",
+      desc: "チーム名・カラーの管理",
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
@@ -49,27 +49,25 @@ export function MypageScreen() {
   ];
 
   return (
-    <div className="flex min-h-dvh flex-col bg-[hsl(210,70%,6%)] pb-16">
+    <div className="flex min-h-dvh flex-col bg-[#F8F9FB] pb-16">
       {/* Header */}
-      <div className="relative px-4 pb-4 pt-6">
-        <div className="absolute left-0 right-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-[hsl(38,100%,50%)] to-transparent" />
-        <h1 className="text-center text-sm font-bold text-[hsl(48,100%,96%)]">
+      <div className="px-4 pb-4 pt-6">
+        <h1 className="text-center text-sm font-bold text-[#1A1D23]">
           {"マイページ"}
         </h1>
       </div>
 
       {/* Profile Card */}
-      <div className="mx-4 mb-4 overflow-hidden rounded-2xl bg-[hsl(210,50%,10%)] ring-1 ring-[hsl(210,30%,18%)]">
+      <div className="mx-4 mb-4 overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white shadow-sm">
         <div className="flex items-center gap-4 p-4">
-          {/* Avatar */}
           <div
-            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-xl font-black text-white/90 shadow-lg"
+            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-xl font-black text-white shadow-md"
             style={{ backgroundColor: myTeam.color }}
           >
             {userName.charAt(0)}
           </div>
           <div className="flex-1">
-            <p className="text-base font-bold text-[hsl(48,100%,96%)]">
+            <p className="text-base font-bold text-[#1A1D23]">
               {userName}
             </p>
             <div className="mt-0.5 flex items-center gap-1.5">
@@ -77,7 +75,7 @@ export function MypageScreen() {
                 className="h-2.5 w-2.5 rounded-full"
                 style={{ backgroundColor: myTeam.color }}
               />
-              <span className="text-xs text-[hsl(210,15%,55%)]">
+              <span className="text-xs text-[#6B7280]">
                 {myTeam.name}
               </span>
             </div>
@@ -85,18 +83,18 @@ export function MypageScreen() {
         </div>
 
         {/* Stats row */}
-        <div className="grid grid-cols-3 border-t border-[hsl(210,30%,14%)]">
+        <div className="grid grid-cols-3 border-t border-[#F3F4F6]">
           <div className="flex flex-col items-center py-3">
-            <span className="text-lg font-black text-[hsl(120,50%,55%)]">{wins}</span>
-            <span className="text-[9px] text-[hsl(210,15%,45%)]">{"勝ち"}</span>
+            <span className="text-lg font-black text-[#16A34A]">{wins}</span>
+            <span className="text-[9px] text-[#9CA3AF]">{"勝ち"}</span>
           </div>
-          <div className="flex flex-col items-center border-x border-[hsl(210,30%,14%)] py-3">
-            <span className="text-lg font-black text-[hsl(0,70%,55%)]">{losses}</span>
-            <span className="text-[9px] text-[hsl(210,15%,45%)]">{"負け"}</span>
+          <div className="flex flex-col items-center border-x border-[#F3F4F6] py-3">
+            <span className="text-lg font-black text-[#DC2626]">{losses}</span>
+            <span className="text-[9px] text-[#9CA3AF]">{"負け"}</span>
           </div>
           <div className="flex flex-col items-center py-3">
-            <span className="text-lg font-black text-[hsl(210,15%,55%)]">{draws}</span>
-            <span className="text-[9px] text-[hsl(210,15%,45%)]">{"引分"}</span>
+            <span className="text-lg font-black text-[#6B7280]">{draws}</span>
+            <span className="text-[9px] text-[#9CA3AF]">{"引分"}</span>
           </div>
         </div>
       </div>
@@ -107,18 +105,18 @@ export function MypageScreen() {
           <button
             key={item.label}
             onClick={item.action}
-            className="flex items-center gap-3 rounded-xl bg-[hsl(210,50%,10%)] px-4 py-3.5 text-left transition-all ring-1 ring-[hsl(210,30%,18%)] active:scale-[0.98]"
+            className="flex items-center gap-3 rounded-xl border border-[#E5E7EB] bg-white px-4 py-3.5 text-left shadow-sm transition-all active:scale-[0.98]"
           >
-            <div className="text-[hsl(38,100%,50%)]">{item.icon}</div>
+            <div className="text-[#2563EB]">{item.icon}</div>
             <div className="flex-1">
-              <p className="text-sm font-bold text-[hsl(48,100%,96%)]">
+              <p className="text-sm font-bold text-[#1A1D23]">
                 {item.label}
               </p>
-              <p className="text-[10px] text-[hsl(210,15%,45%)]">
+              <p className="text-[10px] text-[#9CA3AF]">
                 {item.desc}
               </p>
             </div>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="hsl(210,15%,35%)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="9 18 15 12 9 6" />
             </svg>
           </button>
@@ -129,7 +127,7 @@ export function MypageScreen() {
       <div className="mt-auto px-4 pb-4 pt-6">
         <button
           onClick={logout}
-          className="w-full rounded-xl border border-[hsl(0,50%,30%)] bg-[hsl(0,50%,12%)] px-4 py-3 text-sm font-bold text-[hsl(0,70%,60%)] transition-all active:scale-[0.98]"
+          className="w-full rounded-xl border border-[#FCA5A5] bg-[#FEF2F2] px-4 py-3 text-sm font-bold text-[#DC2626] transition-all active:scale-[0.98]"
         >
           {"ログアウト"}
         </button>

@@ -13,7 +13,6 @@ export function BottomTabs() {
   const { state, navigate } = useAppContext();
   const currentScreen = state.currentScreen;
 
-  // Hide bottom tabs on certain screens
   const hideTabsScreens: Screen[] = [
     "login",
     "team-select",
@@ -29,7 +28,6 @@ export function BottomTabs() {
     return null;
   }
 
-  // Determine active tab based on current screen
   const getActiveTab = () => {
     if (currentScreen === "home") return "home";
     if (currentScreen === "score-history") return "scores";
@@ -40,7 +38,7 @@ export function BottomTabs() {
   const activeTab = getActiveTab();
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-50 border-t border-[hsl(210,40%,18%)] bg-[hsl(210,60%,7%)] backdrop-blur-xl">
+    <div className="fixed inset-x-0 bottom-0 z-50 border-t border-[#E5E7EB] bg-white/95 backdrop-blur-lg">
       <div className="mx-auto flex max-w-md items-center justify-around">
         {tabs.map((tab) => {
           const Icon = tab.icon;
@@ -56,12 +54,12 @@ export function BottomTabs() {
               <Icon
                 size={20}
                 className={`transition-colors ${
-                  isActive ? "text-[hsl(38,100%,50%)]" : "text-[hsl(210,20%,45%)]"
+                  isActive ? "text-[#2563EB]" : "text-[#9CA3AF]"
                 }`}
               />
               <span
                 className={`text-[9px] font-bold transition-colors ${
-                  isActive ? "text-[hsl(38,100%,50%)]" : "text-[hsl(210,20%,45%)]"
+                  isActive ? "text-[#2563EB]" : "text-[#9CA3AF]"
                 }`}
               >
                 {tab.label}
