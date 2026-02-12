@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, type ReactNode } from "react";
-import { AppContext, type AppState, type Screen } from "@/lib/store";
+import { AppContext, type AppState, type Screen, type GameConfig } from "@/lib/store";
 import {
   createDefaultMyTeam,
   createRandomOpponent,
@@ -15,10 +15,11 @@ import { HomeMenu } from "@/components/screens/home-menu";
 import { TeamEdit } from "@/components/screens/team-edit";
 import { RosterScreen } from "@/components/screens/roster-screen";
 import { LineupScreen } from "@/components/screens/lineup-screen";
-
+import { GameSetupScreen } from "@/components/screens/game-setup-screen";
 import { GameScreen } from "@/components/screens/game-screen";
 import { ScoreHistoryScreen } from "@/components/screens/score-history-screen";
 import { GameDetailScreen } from "@/components/screens/game-detail-screen";
+import { BottomTabs } from "@/components/bottom-tabs";
 
 function ScreenRouter({ screen }: { screen: Screen }) {
   switch (screen) {
@@ -32,6 +33,8 @@ function ScreenRouter({ screen }: { screen: Screen }) {
       return <LineupScreen />;
     case "defense":
       return <LineupScreen />;
+    case "game-setup":
+      return <GameSetupScreen />;
     case "game":
       return <GameScreen />;
     case "player-stats":
@@ -52,6 +55,7 @@ export function AppProvider({ children }: { children?: ReactNode }) {
     gameRecords: [],
     playerGameStats: [],
     currentScreen: "home",
+    gameConfig: { isTopOfInning: true, totalInnings: 9 },
   });
 
   const [selectedGameId, setSelectedGameId] = useState<string | null>(null);
@@ -83,6 +87,10 @@ export function AppProvider({ children }: { children?: ReactNode }) {
     }));
   }, []);
 
+  const setGameConfig = useCallback((config: GameConfig) => {
+    setState((s) => ({ ...s, gameConfig: config }));
+  }, []);
+
   return (
     <AppContext.Provider
       value={{
@@ -95,9 +103,13 @@ export function AppProvider({ children }: { children?: ReactNode }) {
         navigate,
         selectedGameId,
         setSelectedGameId,
+        setGameConfig,
       }}
     >
-      <ScreenRouter screen={state.currentScreen} />
+      <>
+        <ScreenRouter screen={state.currentScreen} />
+        <BottomTabs />
+      </>
     </AppContext.Provider>
   );
 }

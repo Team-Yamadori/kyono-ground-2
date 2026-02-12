@@ -55,11 +55,11 @@ export function HomeMenu() {
 
   const handleGameStart = () => {
     setOpponent(createRandomOpponent());
-    navigate("lineup");
+    navigate("game-setup");
   };
 
   return (
-    <div className="flex min-h-dvh flex-col bg-[hsl(210,70%,6%)]">
+    <div className="flex min-h-dvh flex-col bg-[hsl(210,70%,6%)] pb-16">
       {/* Header */}
       <div className="relative flex flex-col items-center px-4 pb-3 pt-6">
         <div className="absolute left-0 right-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-[hsl(38,100%,50%)] to-transparent" />

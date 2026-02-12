@@ -232,7 +232,7 @@ export function RosterScreen() {
   const sorted = [...team.players].sort((a, b) => a.number - b.number);
 
   return (
-    <div className="flex min-h-dvh flex-col bg-[hsl(210,70%,6%)]">
+    <div className="flex min-h-dvh flex-col bg-[hsl(210,70%,6%)] pb-16">
       {/* Header */}
       <div className="flex items-center border-b border-[hsl(210,40%,18%)] bg-[hsl(210,60%,8%)] px-3 py-3">
         <button
