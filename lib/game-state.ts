@@ -34,6 +34,7 @@ export interface PendingPlay {
   preserveCount?: boolean;
   hitDirection?: HitDirection;
   fieldingNumbers?: number[];
+  requiresOut?: boolean;
 }
 
 // Simple instant actions

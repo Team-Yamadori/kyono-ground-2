@@ -38,6 +38,9 @@ export function RunnerResolution({ play, onUpdate, onCancel, onConfirm }: Runner
     .map((slot, i) => ({ slot, originalIndex: i }))
     .sort((a, b) => FROM_ORDER[a.slot.from] - FROM_ORDER[b.slot.from]);
 
+  const hasOut = play.slots.some((sl) => sl.destination === "out");
+  const canConfirm = !play.requiresOut || hasOut;
+
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/30">
       <div className="w-full max-w-md animate-[slideUp_0.25s_ease-out] rounded-t-2xl border-t-2 border-[#2563EB] bg-white shadow-xl">
@@ -85,8 +88,10 @@ export function RunnerResolution({ play, onUpdate, onCancel, onConfirm }: Runner
             className="flex-1 rounded-xl bg-[#F3F4F6] py-3 text-sm font-black text-[#6B7280] active:scale-95">
             キャンセル
           </button>
-          <button type="button" onClick={onConfirm}
-            className="flex-[2] rounded-xl bg-[#2563EB] py-3 text-sm font-black text-white active:scale-95">
+          <button type="button" onClick={onConfirm} disabled={!canConfirm}
+            className={`flex-[2] rounded-xl py-3 text-sm font-black active:scale-95 ${
+              canConfirm ? "bg-[#2563EB] text-white" : "bg-[#E5E7EB] text-[#9CA3AF]"
+            }`}>
             確定
           </button>
         </div>

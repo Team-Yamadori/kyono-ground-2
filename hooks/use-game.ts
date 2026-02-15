@@ -218,21 +218,21 @@ export function useGame() {
         if (r2) slots.push({ from: "2B", label: "2塁走者", destination: "2B", options: ["2B", "3B", "home", "out"] });
         if (r1) slots.push({ from: "1B", label: "1塁走者", destination: "1B", options: ["1B", "2B", "3B", "home", "out"] });
         slots.push({ from: "batter", label: "打者", destination: "out", options: ["out", "1B", "2B", "3B", "home"] });
-        return { actionLabel: "ゴロ", slots, isHit: false, isError: false };
+        return { actionLabel: "ゴロ", slots, isHit: false, isError: false, requiresOut: true };
       }
       case "flyout": {
         if (r3) slots.push({ from: "3B", label: "3塁走者", destination: "3B", options: ["3B", "home", "out"] });
         if (r2) slots.push({ from: "2B", label: "2塁走者", destination: "2B", options: ["2B", "3B", "home", "out"] });
         if (r1) slots.push({ from: "1B", label: "1塁走者", destination: "1B", options: ["1B", "2B", "3B", "home", "out"] });
         slots.push({ from: "batter", label: "打者", destination: "out", options: ["out"] });
-        return { actionLabel: "フライ", slots, isHit: false, isError: false };
+        return { actionLabel: "フライ", slots, isHit: false, isError: false, requiresOut: true };
       }
       case "lineout": {
         if (r3) slots.push({ from: "3B", label: "3塁走者", destination: "3B", options: ["3B", "home", "out"] });
         if (r2) slots.push({ from: "2B", label: "2塁走者", destination: "2B", options: ["2B", "3B", "home", "out"] });
         if (r1) slots.push({ from: "1B", label: "1塁走者", destination: "1B", options: ["1B", "2B", "3B", "home", "out"] });
         slots.push({ from: "batter", label: "打者", destination: "out", options: ["out"] });
-        return { actionLabel: "ライナー", slots, isHit: false, isError: false };
+        return { actionLabel: "ライナー", slots, isHit: false, isError: false, requiresOut: true };
       }
       case "sacrifice-fly": {
         if (!r3) return null;
@@ -240,7 +240,7 @@ export function useGame() {
         if (r2) slots.push({ from: "2B", label: "2塁走者", destination: "2B", options: ["2B", "3B", "home"] });
         if (r1) slots.push({ from: "1B", label: "1塁走者", destination: "1B", options: ["1B", "2B", "3B", "home"] });
         slots.push({ from: "batter", label: "打者", destination: "out", options: ["out"] });
-        return { actionLabel: "犠飛", slots, isHit: false, isError: false };
+        return { actionLabel: "犠飛", slots, isHit: false, isError: false, requiresOut: true };
       }
       case "sacrifice-bunt": {
         if (!hasRunners) return null;
@@ -248,7 +248,7 @@ export function useGame() {
         if (r2) slots.push({ from: "2B", label: "2塁走者", destination: "3B", options: ["3B", "home"] });
         if (r1) slots.push({ from: "1B", label: "1塁走者", destination: "2B", options: ["2B", "3B"] });
         slots.push({ from: "batter", label: "打者", destination: "out", options: ["out", "1B", "2B"] });
-        return { actionLabel: "犠打", slots, isHit: false, isError: false };
+        return { actionLabel: "犠打", slots, isHit: false, isError: false, requiresOut: true };
       }
       case "fielders-choice": {
         if (!hasRunners) return null;
@@ -270,7 +270,7 @@ export function useGame() {
         if (r3) slots.push({ from: "3B", label: "3塁走者", destination: "3B", options: ["out", "3B"] });
         if (r2) slots.push({ from: "2B", label: "2塁走者", destination: "2B", options: ["out", "2B"] });
         if (r1) slots.push({ from: "1B", label: "1塁走者", destination: "out", options: ["out", "1B"] });
-        return { actionLabel: "盗塁失敗", slots, isHit: false, isError: false, preserveCount: true };
+        return { actionLabel: "盗塁失敗", slots, isHit: false, isError: false, preserveCount: true, requiresOut: true };
       }
       case "wild-pitch": {
         if (!hasRunners) return null;
@@ -298,7 +298,7 @@ export function useGame() {
         if (r3) slots.push({ from: "3B", label: "3塁走者", destination: "3B", options: ["out", "3B"] });
         if (r2) slots.push({ from: "2B", label: "2塁走者", destination: "2B", options: ["out", "2B"] });
         if (r1) slots.push({ from: "1B", label: "1塁走者", destination: "1B", options: ["out", "1B"] });
-        return { actionLabel: "走塁アウト", slots, isHit: false, isError: false, preserveCount: true };
+        return { actionLabel: "走塁アウト", slots, isHit: false, isError: false, preserveCount: true, requiresOut: true };
       }
       case "error": {
         if (r3) slots.push({ from: "3B", label: "3塁走者", destination: "home", options: ["home", "3B"] });
@@ -333,7 +333,7 @@ export function useGame() {
         if (r3) slots.push({ from: "3B", label: "3塁走者", destination: "3B", options: ["out", "3B"] });
         if (r2) slots.push({ from: "2B", label: "2塁走者", destination: "2B", options: ["out", "2B"] });
         if (r1) slots.push({ from: "1B", label: "1塁走者", destination: "1B", options: ["out", "1B"] });
-        return { actionLabel: "守備妨害", slots, isHit: false, isError: false, preserveCount: true };
+        return { actionLabel: "守備妨害", slots, isHit: false, isError: false, preserveCount: true, requiresOut: true };
       }
       default:
         return null;
