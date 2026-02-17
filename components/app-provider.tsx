@@ -23,12 +23,17 @@ import { LoginScreen } from "@/components/screens/login-screen";
 import { TeamSelectScreen } from "@/components/screens/team-select-screen";
 import { TeamCreateScreen } from "@/components/screens/team-create-screen";
 import { MypageScreen } from "@/components/screens/mypage-screen";
+import { InviteCodesScreen } from "@/components/screens/invite-codes-screen";
+import { UserProfileScreen } from "@/components/screens/user-profile-screen";
+import { PermissionManagementScreen } from "@/components/screens/permission-management-screen";
 import { BottomTabs } from "@/components/bottom-tabs";
 
 function ScreenRouter({ screen }: { screen: Screen }) {
   switch (screen) {
     case "login":
       return <LoginScreen />;
+    case "user-profile":
+      return <UserProfileScreen />;
     case "team-select":
       return <TeamSelectScreen />;
     case "team-create":
@@ -41,6 +46,8 @@ function ScreenRouter({ screen }: { screen: Screen }) {
       return <RosterScreen />;
     case "lineup":
       return <LineupScreen />;
+    case "lineup-edit":
+      return <LineupScreen editOnly />;
     case "defense":
       return <LineupScreen />;
     case "game-setup":
@@ -55,6 +62,10 @@ function ScreenRouter({ screen }: { screen: Screen }) {
       return <GameDetailScreen />;
     case "mypage":
       return <MypageScreen />;
+    case "invite-codes":
+      return <InviteCodesScreen />;
+    case "permission-management":
+      return <PermissionManagementScreen />;
     default:
       return <HomeMenu />;
   }
@@ -71,6 +82,7 @@ export function AppProvider({ children }: { children?: ReactNode }) {
     activeGameState: null,
     isLoggedIn: false,
     userName: "",
+    userRelation: "",
     teamCreated: false,
   });
 
@@ -132,6 +144,15 @@ export function AppProvider({ children }: { children?: ReactNode }) {
       ...s,
       isLoggedIn: true,
       userName: name,
+      currentScreen: "user-profile",
+    }));
+  }, []);
+
+  const setUserProfile = useCallback((name: string, relation: string) => {
+    setState((s) => ({
+      ...s,
+      userName: name,
+      userRelation: relation,
       currentScreen: s.teamCreated ? "home" : "team-select",
     }));
   }, []);
@@ -149,6 +170,7 @@ export function AppProvider({ children }: { children?: ReactNode }) {
       ...s,
       isLoggedIn: false,
       userName: "",
+      userRelation: "",
       currentScreen: "login",
     }));
   }, []);
@@ -171,6 +193,7 @@ export function AppProvider({ children }: { children?: ReactNode }) {
         setGameConfig,
         setActiveGameState,
         setLogin,
+        setUserProfile,
         setTeamCreated,
         logout,
       }}

@@ -5,11 +5,13 @@ import { ArrowLeft, Swords } from "lucide-react";
 import { useState } from "react";
 
 export function GameSetupScreen() {
-  const { state, navigate, goBack, setGameConfig } = useAppContext();
+  const { state, navigate, goBack, setGameConfig, setOpponent } = useAppContext();
   const { myTeam, opponent } = state;
 
   const [isTopOfInning, setIsTopOfInning] = useState(true);
   const [totalInnings, setTotalInnings] = useState(9);
+  const [editingName, setEditingName] = useState(false);
+  const [nameInput, setNameInput] = useState(opponent.name);
 
   const handleStart = () => {
     setGameConfig({ isTopOfInning, totalInnings });
@@ -37,14 +39,17 @@ export function GameSetupScreen() {
               {myTeam.shortName}
             </div>
             <span className="text-sm font-black text-[#1A1D23]">{myTeam.name}</span>
+            <span className="ml-auto rounded-md bg-[#EFF6FF] px-2 py-0.5 text-[10px] font-black text-[#2563EB]">{isTopOfInning ? "先攻" : "後攻"}</span>
           </div>
           <p className="text-center text-xs font-bold text-[#D1D5DB]">VS</p>
-          <div className="flex items-center gap-3 rounded-xl border border-[#E5E7EB] bg-white p-3 shadow-sm">
+          <button type="button" onClick={() => setEditingName(true)}
+            className="flex w-full items-center gap-3 rounded-xl border border-[#E5E7EB] bg-white p-3 shadow-sm active:bg-[#F9FAFB]">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-xs font-black text-white" style={{ backgroundColor: opponent.color }}>
               {opponent.shortName}
             </div>
             <span className="text-sm font-black text-[#1A1D23]">{opponent.name}</span>
-          </div>
+            <span className="ml-auto rounded-md bg-[#FEF2F2] px-2 py-0.5 text-[10px] font-black text-[#DC2626]">{isTopOfInning ? "後攻" : "先攻"}</span>
+          </button>
         </div>
 
         {/* Offense/Defense */}
@@ -88,6 +93,36 @@ export function GameSetupScreen() {
           {"オーダー設定へ"}
         </button>
       </div>
+      {editingName && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+          <div className="mx-6 w-full max-w-sm rounded-2xl bg-white p-5 shadow-xl">
+            <p className="mb-3 text-sm font-black text-[#1A1D23]">{"相手チーム名"}</p>
+            <input
+              type="text"
+              value={nameInput}
+              onChange={(e) => setNameInput(e.target.value)}
+              className="w-full rounded-xl border border-[#E5E7EB] px-3 py-2.5 text-sm font-bold text-[#1A1D23] outline-none focus:border-[#2563EB]"
+              autoFocus
+            />
+            <div className="mt-4 flex gap-2">
+              <button type="button" onClick={() => { setEditingName(false); setNameInput(opponent.name); }}
+                className="flex-1 rounded-xl bg-[#F3F4F6] py-2.5 text-sm font-black text-[#6B7280] active:scale-95">
+                {"キャンセル"}
+              </button>
+              <button type="button" onClick={() => {
+                const trimmed = nameInput.trim();
+                if (trimmed) {
+                  setOpponent({ ...opponent, name: trimmed, shortName: trimmed.slice(0, 2) });
+                }
+                setEditingName(false);
+              }}
+                className="flex-1 rounded-xl bg-[#2563EB] py-2.5 text-sm font-black text-white active:scale-95">
+                {"変更"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

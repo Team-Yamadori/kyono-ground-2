@@ -124,6 +124,10 @@ export function HomeMenu() {
               {myTeam.players.length}{"名"}
             </span>
           </div>
+          <div className="flex flex-col items-end">
+            <span className="text-[8px] font-bold text-[#9CA3AF]">{"チームコード"}</span>
+            <span className="font-mono text-[11px] font-black tracking-wider text-[#2563EB]">{myTeam.inviteCode}</span>
+          </div>
         </div>
         <div className="grid grid-cols-4 gap-0">
           {starterPreview.map((s) => (

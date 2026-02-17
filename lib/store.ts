@@ -18,24 +18,29 @@ export interface AppState {
   activeGameState: import("@/lib/game-state").GameState | null;
   isLoggedIn: boolean;
   userName: string;
+  userRelation: string;
   teamCreated: boolean;
 }
 
 export type Screen =
   | "login"
+  | "user-profile"
   | "team-select"
   | "team-create"
   | "home"
   | "team-edit"
   | "roster"
   | "lineup"
+  | "lineup-edit"
   | "defense"
   | "game-setup"
   | "game"
   | "score-history"
   | "game-detail"
   | "player-stats"
-  | "mypage";
+  | "mypage"
+  | "invite-codes"
+  | "permission-management";
 
 export interface AppContextValue {
   state: AppState;
@@ -51,6 +56,7 @@ export interface AppContextValue {
   setGameConfig: (config: GameConfig) => void;
   setActiveGameState: (gs: import("@/lib/game-state").GameState | null) => void;
   setLogin: (name: string) => void;
+  setUserProfile: (name: string, relation: string) => void;
   setTeamCreated: () => void;
   logout: () => void;
 }

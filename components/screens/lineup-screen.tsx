@@ -7,9 +7,10 @@ import { useState, useCallback, useRef, useEffect } from "react";
 
 type DragState =
   | { mode: "none" }
-  | { mode: "dragging"; slotType: "lineup" | "bench"; slotIndex: number; startX: number; startY: number; currentX: number; currentY: number };
+  | { mode: "player"; slotType: "lineup" | "bench"; slotIndex: number; startX: number; startY: number; currentX: number; currentY: number }
+  | { mode: "position"; slotIndex: number; startX: number; startY: number; currentX: number; currentY: number };
 
-export function LineupScreen() {
+export function LineupScreen({ editOnly = false }: { editOnly?: boolean } = {}) {
   const { state, navigate, goBack, updateMyTeam } = useAppContext();
   const team = state.myTeam;
   const [dragState, setDragState] = useState<DragState>({ mode: "none" });
@@ -23,19 +24,29 @@ export function LineupScreen() {
 
   const handlePointerDown = useCallback((e: React.PointerEvent, slotType: "lineup" | "bench", index: number) => {
     e.preventDefault();
-    const touch = e;
+    const x = e.clientX, y = e.clientY;
     longPressTimerRef.current = setTimeout(() => {
-      setDragState({ mode: "dragging", slotType, slotIndex: index, startX: touch.clientX, startY: touch.clientY, currentX: touch.clientX, currentY: touch.clientY });
+      setDragState({ mode: "player", slotType, slotIndex: index, startX: x, startY: y, currentX: x, currentY: y });
+    }, 300);
+  }, []);
+
+  const handlePosPointerDown = useCallback((e: React.PointerEvent, index: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const x = e.clientX, y = e.clientY;
+    longPressTimerRef.current = setTimeout(() => {
+      setDragState({ mode: "position", slotIndex: index, startX: x, startY: y, currentX: x, currentY: y });
     }, 300);
   }, []);
 
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
-    if (dragState.mode === "dragging") { e.preventDefault(); setDragState({ ...dragState, currentX: e.clientX, currentY: e.clientY }); }
+    if (dragState.mode !== "none") { e.preventDefault(); setDragState({ ...dragState, currentX: e.clientX, currentY: e.clientY }); }
   }, [dragState]);
 
   const handlePointerUp = useCallback(() => {
     clearLongPress();
-    if (dragState.mode === "dragging" && hoverSlot) {
+
+    if (dragState.mode === "player" && hoverSlot) {
       const from = { type: dragState.slotType, index: dragState.slotIndex };
       const to = hoverSlot;
       if (from.type !== to.type || from.index !== to.index) {
@@ -49,16 +60,34 @@ export function LineupScreen() {
         });
       }
     }
+
+    if (dragState.mode === "position" && hoverSlot?.type === "lineup") {
+      const fromIdx = dragState.slotIndex;
+      const toIdx = hoverSlot.index;
+      if (fromIdx !== toIdx) {
+        updateMyTeam((t) => {
+          const newLineup = [...t.lineup];
+          const fromPos = newLineup[fromIdx].fieldPosition;
+          const toPos = newLineup[toIdx].fieldPosition;
+          newLineup[fromIdx] = { ...newLineup[fromIdx], fieldPosition: toPos };
+          newLineup[toIdx] = { ...newLineup[toIdx], fieldPosition: fromPos };
+          return { ...t, lineup: newLineup };
+        });
+      }
+    }
+
     setDragState({ mode: "none" }); setHoverSlot(null);
   }, [dragState, hoverSlot, clearLongPress, updateMyTeam]);
 
   const handlePointerCancel = useCallback(() => { clearLongPress(); setDragState({ mode: "none" }); setHoverSlot(null); }, [clearLongPress]);
-  const handleSlotPointerEnter = useCallback((slotType: "lineup" | "bench", index: number) => { if (dragState.mode === "dragging") setHoverSlot({ type: slotType, index }); }, [dragState]);
+  const handleSlotPointerEnter = useCallback((slotType: "lineup" | "bench", index: number) => { if (dragState.mode !== "none") setHoverSlot({ type: slotType, index }); }, [dragState]);
 
   useEffect(() => () => clearLongPress(), [clearLongPress]);
 
-  const isDragging = dragState.mode === "dragging";
-  const draggedSlot = isDragging ? { type: dragState.slotType, index: dragState.slotIndex } : null;
+  const isDragging = dragState.mode !== "none";
+  const isPlayerDrag = dragState.mode === "player";
+  const isPosDrag = dragState.mode === "position";
+  const draggedSlot = isPlayerDrag ? { type: dragState.slotType, index: dragState.slotIndex } : null;
 
   return (
     <div className="flex min-h-dvh flex-col bg-[#F8F9FB] pb-16"
@@ -75,7 +104,7 @@ export function LineupScreen() {
       {/* Hint bar */}
       <div className={`flex items-center justify-center px-4 py-1.5 ${isDragging ? "bg-[#EFF6FF]" : "bg-[#F3F4F6]"}`}>
         <span className={`text-[10px] font-bold ${isDragging ? "text-[#2563EB]" : "text-[#9CA3AF]"}`}>
-          {isDragging ? "入れ替える位置で指を離す" : "長押しで選手を移動"}
+          {isPlayerDrag ? "入れ替える位置で指を離す" : isPosDrag ? "入れ替える守備位置で指を離す" : "長押しで選手を移動 / 守備を長押しで入れ替え"}
         </span>
       </div>
 
@@ -91,12 +120,13 @@ export function LineupScreen() {
           <div className="flex flex-col gap-1">
             {lineupPlayers.map((player, i) => {
               if (!player) return null;
-              const isDragged = draggedSlot?.type === "lineup" && draggedSlot.index === i;
-              const isHovered = hoverSlot?.type === "lineup" && hoverSlot.index === i && !isDragged;
+              const isDraggedPlayer = draggedSlot?.type === "lineup" && draggedSlot.index === i;
+              const isDraggedPos = isPosDrag && dragState.slotIndex === i;
+              const isHovered = hoverSlot?.type === "lineup" && hoverSlot.index === i && !isDraggedPlayer && !isDraggedPos;
               return (
                 <div key={team.lineup[i].playerId} onPointerDown={(e) => handlePointerDown(e, "lineup", i)} onPointerEnter={() => handleSlotPointerEnter("lineup", i)}
                   className={`flex items-center gap-1.5 rounded-lg px-2 py-2 transition-all ${
-                    isDragged ? "scale-95 opacity-40" : isHovered ? "border-2 border-dashed border-[#2563EB] bg-[#EFF6FF]" : "border border-[#E5E7EB] bg-white shadow-sm"
+                    isDraggedPlayer ? "scale-95 opacity-40" : isHovered ? "border-2 border-dashed border-[#2563EB] bg-[#EFF6FF]" : "border border-[#E5E7EB] bg-white shadow-sm"
                   } ${isDragging ? "" : "active:scale-95"}`} style={{ touchAction: "none" }}>
                   <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-[#EFF6FF]">
                     <span className="text-[10px] font-black text-[#2563EB]">{i + 1}</span>
@@ -105,8 +135,13 @@ export function LineupScreen() {
                     <span className="text-[9px] font-bold tabular-nums text-[#9CA3AF]">#{player.number}</span>
                     <span className="truncate text-[11px] font-black text-[#1A1D23]">{player.name}</span>
                   </div>
-                  <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-[#F3F4F6]">
-                    <span className="text-[10px] font-black text-[#374151]">{POSITION_SHORT[team.lineup[i].fieldPosition]}</span>
+                  <div onPointerDown={(e) => handlePosPointerDown(e, i)}
+                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-all ${
+                      isDraggedPos ? "scale-90 bg-[#2563EB] opacity-40" : isHovered && isPosDrag ? "border-2 border-dashed border-[#2563EB] bg-[#EFF6FF]" : "bg-[#EFF6FF]"
+                    }`} style={{ touchAction: "none" }}>
+                    <span className={`text-xs font-black ${isDraggedPos ? "text-white" : "text-[#2563EB]"}`}>
+                      {POSITION_SHORT[team.lineup[i].fieldPosition]}
+                    </span>
                   </div>
                 </div>
               );
@@ -124,19 +159,16 @@ export function LineupScreen() {
           <div className="flex flex-col gap-1">
             {benchPlayers.map((player, i) => {
               if (!player) return null;
-              const isDragged = draggedSlot?.type === "bench" && draggedSlot.index === i;
-              const isHovered = hoverSlot?.type === "bench" && hoverSlot.index === i && !isDragged;
+              const isDraggedBench = draggedSlot?.type === "bench" && draggedSlot.index === i;
+              const isHovered = hoverSlot?.type === "bench" && hoverSlot.index === i && !isDraggedBench;
               return (
                 <div key={team.benchPlayers[i]} onPointerDown={(e) => handlePointerDown(e, "bench", i)} onPointerEnter={() => handleSlotPointerEnter("bench", i)}
                   className={`flex items-center gap-1 rounded-lg px-1.5 py-2 transition-all ${
-                    isDragged ? "scale-95 opacity-40" : isHovered ? "border-2 border-dashed border-[#2563EB] bg-[#EFF6FF]" : "border border-[#E5E7EB] bg-white shadow-sm"
+                    isDraggedBench ? "scale-95 opacity-40" : isHovered && isPlayerDrag ? "border-2 border-dashed border-[#2563EB] bg-[#EFF6FF]" : "border border-[#E5E7EB] bg-white shadow-sm"
                   } ${isDragging ? "" : "active:scale-95"}`} style={{ touchAction: "none" }}>
                   <div className="flex flex-1 flex-col items-start overflow-hidden">
                     <span className="w-full truncate text-[10px] font-black text-[#1A1D23]">{player.name}</span>
                     <span className="text-[8px] text-[#9CA3AF]">#{player.number}</span>
-                  </div>
-                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-[#F3F4F6]">
-                    <span className="text-[9px] font-black text-[#374151]">{POSITION_SHORT[player.position]}</span>
                   </div>
                 </div>
               );
@@ -146,7 +178,7 @@ export function LineupScreen() {
       </div>
 
       {/* Floating dragged item */}
-      {isDragging && draggedSlot && (
+      {isPlayerDrag && draggedSlot && (
         <div className="pointer-events-none fixed z-50 opacity-90" style={{ left: dragState.currentX - 40, top: dragState.currentY - 20, width: draggedSlot.type === "lineup" ? "200px" : "100px" }}>
           {draggedSlot.type === "lineup" ? (
             <div className="flex items-center gap-1.5 rounded-lg border-2 border-[#2563EB] bg-white px-2 py-2 shadow-xl">
@@ -163,19 +195,29 @@ export function LineupScreen() {
                 <span className="w-full truncate text-[10px] font-black text-[#1A1D23]">{benchPlayers[draggedSlot.index]?.name}</span>
                 <span className="text-[8px] text-[#9CA3AF]">#{benchPlayers[draggedSlot.index]?.number}</span>
               </div>
-              <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-[#F3F4F6]"><span className="text-[9px] font-black text-[#374151]">{POSITION_SHORT[benchPlayers[draggedSlot.index]?.position!]}</span></div>
             </div>
           )}
         </div>
       )}
 
+      {/* Floating position badge */}
+      {isPosDrag && (
+        <div className="pointer-events-none fixed z-50" style={{ left: dragState.currentX - 18, top: dragState.currentY - 18 }}>
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-[#2563EB] bg-white shadow-xl">
+            <span className="text-sm font-black text-[#2563EB]">{POSITION_SHORT[team.lineup[dragState.slotIndex].fieldPosition]}</span>
+          </div>
+        </div>
+      )}
+
       {/* Bottom Action */}
-      <div className="border-t border-[#E5E7EB] bg-white px-4 py-3">
-        <button type="button" onClick={() => { if (!isDragging) navigate("game"); }} disabled={isDragging}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#DC2626] py-3 text-sm font-black text-white shadow-md active:scale-[0.98] disabled:opacity-50">
-          <Swords size={16} />{"プレイボール!"}
-        </button>
-      </div>
+      {!editOnly && (
+        <div className="border-t border-[#E5E7EB] bg-white px-4 py-3">
+          <button type="button" onClick={() => { if (!isDragging) navigate("game"); }} disabled={isDragging}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#DC2626] py-3 text-sm font-black text-white shadow-md active:scale-[0.98] disabled:opacity-50">
+            <Swords size={16} />{"プレイボール!"}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

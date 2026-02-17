@@ -23,6 +23,8 @@ export function BottomTabs() {
     "game-detail",
     "lineup",
     "defense",
+    "staff-management",
+    "permission-management",
   ];
   if (hideTabsScreens.includes(currentScreen)) {
     return null;

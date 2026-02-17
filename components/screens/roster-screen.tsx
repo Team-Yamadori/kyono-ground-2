@@ -1,7 +1,7 @@
 "use client";
 
 import { useAppContext } from "@/lib/store";
-import { POSITION_SHORT, formatAvg, formatEra, type Player, type Position } from "@/lib/team-data";
+import { POSITION_SHORT, formatAvg, formatEra, generatePlayerCode, type Player, type Position } from "@/lib/team-data";
 import { ArrowLeft, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 
@@ -113,7 +113,7 @@ function createNewPlayer(existingNumbers: number[]): Player {
   const usedSet = new Set(existingNumbers);
   let num = 0;
   for (let i = 1; i < 100; i++) { if (!usedSet.has(i)) { num = i; break; } }
-  return { id: `p-${Date.now()}`, name: "新規選手", number: num, position: "右翼" as Position, avg: 0.200, hr: 0, rbi: 0, hits: 0, atBats: 0, runs: 0, stolenBases: 0, obp: 0.200, slg: 0.200, walks: 0, strikeoutsBatting: 0, doubles: 0, triples: 0, sacrificeBunts: 0, sacrificeFlies: 0 };
+  return { id: `p-${Date.now()}`, name: "新規選手", number: num, inviteCode: generatePlayerCode(), position: "右翼" as Position, avg: 0.200, hr: 0, rbi: 0, hits: 0, atBats: 0, runs: 0, stolenBases: 0, obp: 0.200, slg: 0.200, walks: 0, strikeoutsBatting: 0, doubles: 0, triples: 0, sacrificeBunts: 0, sacrificeFlies: 0 };
 }
 
 export function RosterScreen() {
